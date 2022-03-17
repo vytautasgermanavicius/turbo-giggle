@@ -2,7 +2,7 @@
 
 Our APEX coding style was created more than 10 years ago: we are using tabs instead of spaces, `{` allways have new line
 before and etc. There are naming conventions, like, controllers must have prefixes `CRTL_` and Test classed must have
-prefixes `TEST_`.
+prefixes `TEST_`, Trigger handlers must have prefix `TH_`.
 
 # Task 1: Improve Code
 
@@ -45,8 +45,31 @@ Task 3: Rollup Trigger
 > To better understand the impact of this practice on sales, the executive team wants to see account-level sales summary by wood type. There is an Opportunity field called Wood Type which has a value of "Standard" and "Recycled" to represent the two types of wood the company uses to manufacture desks. Initially, the Salesforce Admin attempted to create two roll-up summary fields on the Account that would summarize sales by wood type. However, the company has reached the total number of roll-up summary fields allowed on the Account object so that was not an option. After exhausting all point-and-click options available for delivering this requirement, the Admin turns to you, the Salesforce Developer, to create a trigger that would meet this need. They give you the following acceptance criteria:
 
 > Sales should be summarized on two Account fields:
-Total Sales (Standard Wood)
-Total Sales (Recycled Wood)
-The summaries should be calculated in real-time. StandUp is an enterprise with large data volumes in its Salesforce org so the trigger should be as efficient as possible.
+> * Total Sales (Standard Wood)
+> * Total Sales (Recycled Wood)
+>
+> The summaries should be calculated in real-time. StandUp is an enterprise with large data volumes in its Salesforce org so the trigger should be as efficient as possible.
 
 > Important Notes The goal of this exercise is to understand how you think and to gauge your development skills. The approach you take is more important than the implementation specifics. You may choose to write this in your text editor without deploying to an org if you’d like. Successful compilation is not required. You are free to ask any clarifying questions you need of the Admin before writing the trigger. Code readability and maintainability are very important; do not ignore them. Please write as if your code will be deployed to the production instance of a client with a very complex implementation and large data volumes.
+
+Questions:
+
+* Are other rollupsummary fields still used? (assume: yes)
+* Can opportunity be reassigned to another Account? (assume: no)
+* Can opportunity change type? amount? (assume: yes to both)
+* Is any trigger framework used in this project?
+* Are `Total Sales (Standard Wood)` and `Total Sales (Recycled Wood)`mission-critical? What if some of value may be
+  outdated for period of time?
+
+Solution:
+
+* `Total Sales (Standard Wood)` and `Total Sales (Recycled Wood)` must have default value `0`.
+* Inserting, updating, and deleting of Opportunities has to update `Total Sales (Standard Wood)`
+  and `Total Sales (Recycled Wood)` of related Accounts : sustract old amount value and add new amount value to sum.
+
+Advantage of this solution: it uses only data directly related with alterd opportunities.
+
+Disadvantage of this method: if it fails because of any reason (like locked Accounts), this may case incorrect data.
+This can be solved by periodical recalculation of `Total Sales (Standard Wood)` and `Total Sales (Recycled Wood)` of
+accounts, which had operation with opportunities for given period. This would use less resources, than querying all
+Opportunities for each related account every time opportunity is altered.  
