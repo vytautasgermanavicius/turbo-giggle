@@ -1,0 +1,29 @@
+<!-- Filtered Accounts -->
+<template>
+    <lightning-card title="Accounts">
+
+        <lightning-layout>
+            <lightning-layout-item size="6">
+                <div class="slds-scrollable accounts-container">
+                    <template for:each={accounts} for:item="anAccount">
+                        <div key={anAccount.Id}>
+                            <a data-key={anAccount.Id}
+                               class="slds-m-around_medium"
+                               onclick={onAccountClick}
+                            >{anAccount.Name}</a>
+                        </div>
+                    </template>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="6">
+                <c-account-contact
+                        onloading={setLoading}
+                        onnotify={onNotification}
+                ></c-account-contact>
+            </lightning-layout-item>
+        </lightning-layout>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,10 @@
+<!-- Account Contact -->
+<template>
+    <lightning-card title={title} if:true={haveContacts}>
+        <ul>
+            <li for:each={contacts} for:item="contact" key={contact.Id} class="slds-m-around_x-small">
+                {contact.Name}
+            </li>
+        </ul>
+    </lightning-card>
+</template>
