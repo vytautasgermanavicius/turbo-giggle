@@ -2,7 +2,7 @@ global inherited sharing abstract class WalkingAnimal implements IAnimal
 {
 	public void move()
 	{
-			walk();
+		walk();
 	}
 
 	private void walk()

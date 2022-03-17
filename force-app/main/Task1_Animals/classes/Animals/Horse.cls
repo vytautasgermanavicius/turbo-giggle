@@ -15,12 +15,12 @@ global inherited sharing class Horse implements IAnimal
 		return false;
 	}
 
-	public void neigh()
+	private void neigh()
 	{
 		// neighing behavior here
 	}
 
-	public void slide()
+	private void slide()
 	{
 		// sliding behavior here
 	}

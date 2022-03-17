@@ -15,7 +15,7 @@ global inherited sharing class Alligator implements IAnimal
 		return true;
 	}
 
-	public void hiss()
+	private void hiss()
 	{
 		// hissing behavior here
 	}
