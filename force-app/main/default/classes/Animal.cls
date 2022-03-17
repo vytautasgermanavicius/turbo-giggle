@@ -1,126 +1,111 @@
-public inherited sharing class Animal {
+global inherited sharing class Animal
+{
 
-    global String animalType;
+	private IAnimal innerAnimal;
+	/**
+	 * animalType is global, this may mean that it is shapeshifting animal. To maintain this behaviour, we have to have
+	 *  setter which will update.
+	 */
+	global String animalType
+	{
+		set
+		{
+			if (animalType != value)
+			{
+				innerAnimal = doShapeShift(value);
+			}
+			animalType = value;
+		}
+		get;
+	}
 
-    public Animal(String animalType) {
-        this.animalType = animalType;
-    }
+	public Animal(String animalType)
+	{
+		this.animalType = animalType;
+	}
 
-    public void makeNoise() {
-        if (animalType == 'Lion') {
-            roar();
-        }
-        else if (animalType == 'Cat') {
-            meow();
-        }
-        else if (animalType == 'Horse') {
-            neigh();
-        }
-        else if (animalType == 'Alligator') {
-            hiss();
-        }
-        else if (animalType == 'Bear') {
-            growl();
-        }
-        else if (animalType == 'Cow') {
-            moo();
-        }
-        else if (animalType == 'Dog') {
-            bark();
-        }
-    }
+	/**
+	 * @param newAnimalType String
+	 *
+	 * @return IAnimal
+	 */
+	private static IAnimal doShapeShift(String newAnimalType)
+	{
+		if (newAnimalType == 'Lion')
+		{
+			return new Lion();
+		}
+		if (newAnimalType == 'Cat')
+		{
+			return new Cat();
+		}
+		if (newAnimalType == 'Horse')
+		{
+			return new Horse();
+		}
+		if (newAnimalType == 'Alligator')
+		{
+			return new Alligator();
+		}
+		if (newAnimalType == 'Bear')
+		{
+			return new Bear();
+		}
+		if (newAnimalType == 'Cow')
+		{
+			return new Cow();
+		}
+		if (newAnimalType == 'Dog')
+		{
+			return new Dog();
+		}
 
-    public void move() {
-        if (animalType == 'Lion') {
-            run();
-        }
-        else if (animalType == 'Cat') {
-            walk();
-        }
-        else if (animalType == 'Horse') {
-            slide();
-        }
-        else if (animalType == 'Alligator') {
-            hiss();
-        }
-        else if (animalType == 'Bear') {
-            walk();
-        }
-        else if (animalType == 'Cow') {
-            walk();
-        }
-        else if (animalType == 'Dog') {
-            run();
-        }
-    }
+		// this is to maintain previous behavior: if animal is unknown, it does not fail but does nothing,
+		return new DeadAnimal();
+	}
 
-    public void swim() {
-        if (animalType == 'Lion') {
-            doSwim();
-        }
-        else if (animalType == 'Cat') {
-            // ignore, cannot swim
-        }
-        else if (animalType == 'Horse') {
-            // ignore, cannot swim
-        }
-        else if (animalType == 'Alligator') {
-            doSwim();
-        }
-        else if (animalType == 'Bear') {
-            doSwim();
-        }
-        else if (animalType == 'Cow') {
-            // ignore, cannot swim
-        }
-        else if (animalType == 'Dog') {
-            doSwim();
-        }
-    }
+	public void makeNoise()
+	{
+		innerAnimal.makeNoise();
+	}
 
-    public void roar() {
-        // roaring behavior here
-    }
+	public void move()
+	{
+		innerAnimal.move();
+	}
 
-    public void meow() {
-        // meowing behavior here
-    }
+	public void swim()
+	{
+		if (innerAnimal.canSwim())
+		{
+			doSwim();
+		}
+	}
 
-    public void neigh() {
-        // neighing behavior here
-    }
+	public void doSwim()
+	{
+		// swimming behavior here
+	}
 
-    public void hiss() {
-        // hissing behavior here
-    }
+	/**
+	 * this is to maintain previous behavior: if animal is unknown, it does not fail but does nothing.
+	 */
+	class DeadAnimal implements IAnimal
+	{
+		public void makeNoise()
+		{
+			// does nothing
+		}
 
-    public void growl() {
-        // growling behavior here
-    }
+		public void move()
+		{
+			// does nothing
+		}
 
-    public void moo() {
-        // mooing behavior here
-    }
-
-    public void bark() {
-        // barking behavior here
-    }
-
-    public void run() {
-        // running behavior here
-    }
-
-    public void walk() {
-        // walking behavior here
-    }
-
-    public void slide() {
-        // sliding behavior here
-    }
-
-    public void doSwim() {
-        // swimming behavior here
-    }
-
-
+		public Boolean canSwim()
+		{
+			return false;
+		}
+	}
 }
+
